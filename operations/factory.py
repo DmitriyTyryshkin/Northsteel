@@ -13,11 +13,21 @@ class RollFactory:
         async with async_session() as session:
             roll_dict = data.model_dump()
 
+            print(1)
             roll = RollOrm(**roll_dict)
-            session.add(roll)
-            await session.flush()
-            await session.commit()
-            return roll.id
+            try:
+                print(2)
+                session.add(roll)
+                await session.flush()
+                print(3)
+            except Exception:
+                print(4)
+                return -1
+            else:
+                print(5)
+                await session.flush()
+                await session.commit()
+                return roll.id
 
     @classmethod
     async def find_all(cls, sorting_properties: str) -> list[Roll]:

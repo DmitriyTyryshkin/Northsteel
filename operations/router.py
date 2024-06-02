@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-def check_string(s):
+def check_string(s: str) ->bool:
     pattern = re.compile(r'\d{2}.\d{2}.\d{4}')
     if pattern.match(s):
         return True
@@ -26,9 +26,12 @@ def check_string(s):
 async def add_roll(
         roll: Annotated[RollAdd, Depends()],
 ) -> JSONResponse:
-    if check_string(roll.added_date) and check_string(roll.removed_date):
+    if check_string(roll.added_date) and (roll.removed_date is None or check_string(roll.removed_date)):
         roll_id = await RollFactory.add_one_roll(roll)
-        return JSONResponse(status_code=200, content={f"рулон {roll_id} успешно добавлен"})
+        if roll_id >= 0:
+            return JSONResponse(status_code=200, content={"message": f"рулон {roll_id} успешно добавлен"})
+        else:
+            return JSONResponse(status_code=400, content={"message": "вес и длинна должны быть больше 0"})
     else:
         return JSONResponse(status_code=400, content={"message": f"added_date или removed_date "
                                                                  f"не соотвествует формату даты (дд.мм.гггг)"})
