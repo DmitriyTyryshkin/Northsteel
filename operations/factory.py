@@ -4,10 +4,21 @@ from typing import Union, Any
 from sqlalchemy import select, text
 
 from database import async_session, RollOrm, sync_session
-from operations.schemas import RollAdd, Roll, Dict_generator
+from schemas import RollAdd, Roll, Dict_generator
 
 
 class RollFactory:
+
+    @classmethod
+    def check_connection(cls) -> bool:
+        with sync_session() as session:
+            try:
+                answer = session.execute(text('select 1 from rolls')).first()
+            except Exception:
+                return False
+            else:
+                return True
+
     @classmethod
     async def add_one_roll(cls, data: RollAdd) -> int:
         async with async_session() as session:
@@ -104,11 +115,12 @@ class RollFactory:
             )
             result = await session.execute(query)
             roll_models = result.scalars().all()
+
             total_length = sum([roll.length for roll in roll_models])
             total_weight = sum([roll.weight for roll in roll_models])
 
-            average_length = total_length / len(roll_models)
-            average_weight = total_weight / len(roll_models)
+            average_length = total_length / len(roll_models) if roll_models else 0
+            average_weight = total_weight / len(roll_models) if roll_models else 0
 
         return average_length, average_weight
 
@@ -181,7 +193,7 @@ class RollFactory:
         return min_date, max_date
 
     @classmethod
-    async def min_max_wight_days(cls, start_date: str, end_date: str)-> tuple[str, str]:
+    async def min_max_wight_days(cls, start_date: str, end_date: str) -> tuple[str, str]:
         date_format = '%d.%m.%Y'
         step = datetime.timedelta(days=1)
         start_date = datetime.datetime.strptime(start_date, date_format)

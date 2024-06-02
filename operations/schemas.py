@@ -21,7 +21,7 @@ class RollId(BaseModel):
     roll_id: int
 
 
-class Dict_generator: #объявленная переменная не видна в цикле, поэтому обновляется через класс
+class Dict_generator:  # объявленная переменная не видна в цикле, поэтому обновляется через класс
     def __init__(self):
         self.dictionary = {}
 

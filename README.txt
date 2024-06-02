@@ -1,2 +1,2 @@
 #запуск приложения из консоли:
-uvicorn main:app --reload
+# uvicorn main:app --reload
