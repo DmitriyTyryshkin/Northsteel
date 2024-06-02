@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Учет стальных рулонов</title>
+</head>
+<body>
+<form action="add_roll" method="post">
+<p>введите данные рулона (длинна, вес, дата добавления, дата удаления):
+<input id="length_input" size="2">
+<input id="weight_input" size="2">
+<input id="added_date_input" size="6" pattern="\[0-9]{2}\.\[0-9]{2}\.\[0-9]{4}">
+<input id="removed_date_input" size="6" pattern="\[0-9]{2}\.\[0-9]{2}\.\[0-9]{4}">
+</p>
+<p>формат дат: дд.мм.гггг</p>
+<p><input type="submit" value="Записать"> Статус: </p>
+</form>
+
+
+</body>
+</html>

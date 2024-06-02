@@ -1,0 +1,4 @@
+venv
+rolls.db
+.idea
+__pycache__
